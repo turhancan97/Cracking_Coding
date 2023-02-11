@@ -1,0 +1,8 @@
+Size bir string veriliyor. Bunun bir palindrom permutasyonu olup olmadığını kontrol etmek için bir 
+fonksiyon yazın. Bir palindrom, düzden de tersten de aynı şekilde okunan bir ifadedir. Bir permütasyon,
+harflerin yeniden düzenlenmesidir. Palindromun sadece sözlük kelimeleriyle sınırlandırılmasına gerek yoktur. 
+Büyük/küçük harf ve harf olmayan karakterleri göz ardı edebilirsin. 
+
+Örnek:
+Girdi: Tact Coa
+Çıktı: True (Permutations: 'taco cat', 'atco cta')

@@ -1,0 +1,52 @@
+// Benzersiz: Bir stringteki tüm karakterlerin benzersiz olup olmadığını belitmek için bir algoritma uygulayın. 
+
+boolean isUniqueChars(String str) {
+    if (str.length() > 128) return false;
+
+    boolean[] char_set = new boolean[128];
+    for (int i = 0; i < str.length(); i++) {
+        int val = str.charAt(i);
+
+        if (char_set[val]) return false; // already found this character in the string
+
+        char_set[val] = true;
+    }
+    return true;
+
+}
+
+Bu algoritma bir string içinde benzersiz karakterler olup olmadığını belirlemek için tasarlandı. Öncelikle, string'in uzunluğu 128 karakterden uzun ise, stringin mutlaka yinelenen karakterler içerdiğini varsayar ve false değerini döndürür. Daha sonra, bir boolean türünden 128 elemanlı bir dizi oluşturur ve bu dizinin elemanlarının hepsini false olarak ayarlar. Ardından, stringi karakterlerine ayrıştırır ve her bir karakter için aşağıdaki işlemleri uygular:
+
+1. Karakterin ASCII tablosunda karşılığı olan integer değerini bulur. Örneğin, 'a' karakterinin ASCII değeri 97'tir.
+2. Bu integer değerini kullanarak, dizinin ilgili elemanını true olarak işaretler. Örneğin, 'a' karakterinin ASCII değeri 97 olduğuna göre char_set[97] = true olur.
+3. Eğer stringin bir önceki karakterlerinden biriyle aynı integer değere sahipse (yani aynı karakteri ifade ediyorsa), yani char_set dizisinin ilgili elemanı true ise, fonksiyon false değerini döndürür.
+Bu işlemler tamamlandıktan sonra, fonksiyon true değerini döndürür. Bu, stringin tüm karakterlerinin benzersiz olduğunu gösterir.
+
+Version: 2.
+
+Bir bit vektörü kullanarak alan kullanımımızı sekiz kat azaltabiliriz. Aşağıdaki kodda, string'in yalnızca a'dan z'ye küçük harfleri kullandığını varsayacağız. Bu durum, yalnızca tek bir int kullanmamıza müsaade eder.
+
+ public static boolean isUniqueChars(String str) {
+        int checker = 0;
+
+        for (int i = 0; i < str.length(); i++) {
+            int val = str.charAt(i) - 'a';
+
+            if ((checker & (1 << val))>0) return false; // already found this character in the string
+
+            checker |= (1<<val);
+        }
+        return true;
+    }
+
+    int checker = 0; : Bu satır bir tamsayı değişkeni olan "checker" oluşturur ve başlangıç değeri 0 olarak ayarlar. Bu değişken, metindeki tekil karakterleri izlemek için kullanılacak.
+
+1. for (int i = 0; i < str.length(); i++) : Bu döngü, metin içindeki her karakteri dolaşmak için kullanılır.
+
+2. int val = str.charAt(i) - 'a'; : Bu satır, döngünün i-inci karakterinin ASCII değerini alır ve 'a' karakterinin ASCII değerinden düşer. Bu, metindeki karakterleri 0 ile 25 arasındaki bir değere dönüştürür.
+
+3. if ((checker & (1 << val))>0) return false; : Bu if koşulu, checker değişkeninin val değerinde 1 biti olup olmadığını kontrol eder. Eğer var ise, o zaman o karakter daha önceden görülmüştür ve fonksiyon false döndürür.
+
+4. checker |= (1<<val); : Bu satır, checker değişkeninin val değerinde 1 bitini ayarlar.
+
+5. return true; : Eğer döngü sonunda tüm karakterler için bu if koşulu false döndürmediyse, o zaman tüm karakterler tekil olduğu için fonksiyon true döndürür.

@@ -1,0 +1,59 @@
+Size iki string veriliyor. Birinin diğerinin permütasyonu olup olmadığına karar vermek için bir metot yazın.
+
+İki string eğer permütasyon ise aynı karakterlere sahip ama farklı sıralarda olduklarını biliriz. Bu nedenler, string'lerin 
+sıralanması, iki permütasyondaki karakterlerin aynı sıraya koyacaktır. Yalnızca, string'lerin sıralı versiyonlarını karşılaştırmamız 
+gerekmektedir. 
+
+String sort(Strign s) {
+    char[] content = s.toCharArray();
+    java.util.Arrays.sort(content);
+    return new String(content);
+}
+
+boolean permutation(Strign s, String t) {
+    if (s.length() != t.length()) {
+        return false;
+    }
+
+    return sort(s).equals(sort(t));
+}
+
+Bu algoritma bazı açılardan o kadar optimal durmasa da diğerlerine tercih edilebilir. Temiz, basit ve anlaşılması kolaydır.
+Ancak verimlilik ön planda ise farklı bir algoritma uygulayabiliriz. 
+
+Version: 2.
+
+İki String'in karakter sayısının birbiriyle aynı olup olmadığına bakın.
+
+boolean permutation(Strign s, String t) {
+    if (s.length() != t.length()) return false;
+
+    int[] letters = new int[128]; // Assuming: ASCII
+    for (int i=0; i<s.length(); i++) {
+        letters[s.charAt(i)]++;
+    }
+    for (int i=0; i<t.length(); i++) {
+        letters[t.charAt(i)]--;
+        if (letters[t.charAt(i)]<0) {
+            return false;
+        }
+    }
+
+    return true; // letters has no neg values, and therefore no pos values either
+}
+
+Bu kod parçası, iki metin girdisi alır (s ve t) ve bu iki metin arasında permütasyon olup olmadığını kontrol eder. Algoritma şöyle çalışır:
+
+1. if (s.length() != t.length()) return false; : Bu if koşulu, iki metnin uzunluğunun eşit olup olmadığını kontrol eder. Eğer uzunluklar eşit değilse, fonksiyon false döndürür.
+
+2. int[] letters = new int[128]; : Bu satır, 128 boyutunda bir dizi oluşturur ve tüm elemanlarını 0 olarak ayarlar. Bu dizi, metin içindeki her harf için tekrar sayısını tutacaktır.
+
+3. for (int i=0; i<s.length(); i++) { letters[s.charAt(i)]++; } : Bu döngü, metin 's' içindeki her harf için dizideki tekrar sayısını arttırır.
+
+4. for (int i=0; i<t.length(); i++) { letters[t.charAt(i)]--; if (letters[t.charAt(i)]<0) { return false; } } : Bu döngü, metin 't' içindeki her harf için dizideki tekrar sayısını azaltır. Eğer dizideki bir elemanın değeri negatif olursa, bu iki metin arasında permütasyon olamaz ve fonksiyon false döndürür.
+
+5. return true; : Eğer döngüler tamamlandıysa ve fonksiyon false döndürmediyse, bu iki metin arasında permütasyon vardır ve fonksiyon true döndürür.
+
+Bu kod parçası, dizi kullanarak tekrar sayısını tutar ve bu sayede daha verimli çalışır. Çünkü dizi boyutu 128 olduğu için,
+her harf için tekrar sayısını saklamak için yeterlidir. Bu, iki metin içindeki harflerin sayısını karşılaştırmak için her harf için tek tek dolaşmaya gerek kalmadan, dizi içinde harflerin tekrar sayısını saklamak suretiyle hızlı bir şekilde yapılabilir. Özellikle büyük metinler için bu yöntem daha verimli olacaktır.
+
