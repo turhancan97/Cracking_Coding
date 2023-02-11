@@ -6,3 +6,100 @@ Büyük/küçük harf ve harf olmayan karakterleri göz ardı edebilirsin.
 Örnek:
 Girdi: Tact Coa
 Çıktı: True (Permutations: 'taco cat', 'atco cta')
+
+Bu, bir string'in bir palindromun permütasyonu olmasinin ne anlama geldigini anlamanizin isinize yarayacagi bir sorudur. 
+Böyle bir string'in "tanimlayici özelliklerinin" neler oldugunu sormak gibidir.
+Bir palindrom, düzden de tersten de ayni olan bir string'dir. Bu nedenle bir string'in bir palindromun permütasyonu 
+olup olmadigina karar vermek için, düzden ve tersten ayni olacak sekilde yazilip yazilamayacagini bilmemiz gerekir.
+Bir dizi karakteri düzden ve tersten ayni olacak sekilde yazabilmek için ne gerekir? Neredeyse tüm karakterlerin 
+esit sayida olmasi gerekir ki yarisi bir tarafta, yarisi da diger tarafta olabilsin.
+En fazla bir (ortadaki) karakter tek sayiya sahip olabilir.
+Örnegin, tactcoapapa'nin bir palindromun permütasyonu oldugunu biliriz; çünkü iki T, dört A, iki C, iki P ve bir O 
+bulundurur. O, tüm olasi palindromlarin merkezi olur.
+• Daha net bir sekilde ifade etmek gerekirse, uzunlugu çift sayida ögeli olan string'ler 
+(harf olmayan tüm karakterleri kaldirdiktan sonra) tüm çift karakter sayilarina sahip olmalidir. 
+Uzunlugu tek sayida ögeden olusan string'ler, tek sayida yalnizca tek bir karaktere ship olmalidir. 
+Elbette bir "gift" string, tam olarak bir karakterden olusan tek bir sayiya sahip olamaz. 
+Cünkü aksi takdirde uzunlugu çift sayili ögeden olusan bir string olmazdi (bir tek sayi + birçok çift say = tek sayi). 
+Benzer sekilde, uzunlugu tek sayili ögeden olusan bir string'de çift say olan tüm karakterleri kapsayamaz 
+(cift sayilarin toplami, bir çift sayiya esittir). Bu nedenle bir palindromun permütasyonu olmasi için, 
+bir string'in birden fazla tek karaktere sahip olmamasi gerektigini söylemek yeterlidir. 
+Bu, string'in hem tek hem de cift sayida öge kapsadigi durumlari kapsayacaktir.
+Bu, bizi ilk algoritmamiza götürür.
+
+Bu algoritmanın uygulanması olukca basittir. Her karakterin kaç kez yer aldığını hesaplamak için bir HashTable kullanırız.
+Daha sonra HashTable'da yineleyip, birden fazla karakterlerin tek sayıda olmadığından emin oluruz. 
+---
+
+boolean isPermutationOfPalindrome(String phrase) {
+    int [] table = buildCharFrequencyTable(phrase);
+    return checkMaxOneOdd(table);
+}
+
+/* Check that no more than one character has an odd count */
+
+boolean checkMaxOneOdd(int [] table) {
+    boolean foundOdd = false;
+    for (int count : table) {
+        if (count % 2 == 1) {
+            if (foundOdd) {
+                return false;
+            }
+            foundOdd = true;
+        }
+    }
+    return true;
+}
+
+/* Map each character to a number. a-> 0, b-> 1, c-> 2, d-> 3.
+* This is case insensetive. Non-letter charaters map to -1. */
+
+int getCharNumber(VCharacter c) {
+    int a = Character.getNumericValue('a');
+    int z = Character.getNumericValue('z');
+    int val = Character.getNumericValue(c);
+    if (a <= val && val <= z) {
+        return val - a;
+    }
+    return -1;
+} 
+
+/* Count how many times each character appears. */
+
+int [] buildCharFrequencyTable(String phrase){
+    int [] table = new int[Character.getNumericValue('z') - Character.getNumericValue('a') + 1];
+    for (char c : phrase.toCharArray()) {
+        int x = getCharNumber(c);
+        if (x != -1) {
+            table[x]++;
+        }
+    }
+    return table;
+}
+
+Bu algoritma O(N zaman alır ve burada N stringin uzunluğudur.
+
+Herhangi bir algoritmanın daima, string'in tamamına bakması gerektiği için burada büyük O zamnını optimize edemeyiz. Ancak bazı ufak tefek geliştirmeler yapabiliriz.
+Bu nispeden basit bir sorun oldupu için bazı küçük optimizasyonlar veya en azından bazı ince ayuarlar üzerine tartışmak faydalı olabilir.
+Tek sayıları en son kontrol etmek yerine ilerledike kontol edebiliriz. Sonuna geldiğimizde de cevabımızı alırız.
+
+boolean isPermutationOfPalindrome(String phrase) {
+    int countOdd = 0;
+    int [] table = new int[Character.getNumericValue('z') - Character.getNumericValue('a') + 1];
+    for (char c : phrase.toCharArray()) {
+        int x = getCharNumber(c);
+        if (x != -1) {
+            table[x]++;
+        if (table[x] % 2 == 1) {
+            countOdd++;
+        }
+        else {
+            countOdd--
+        }
+    }
+}
+return countOdd <= 1;
+}
+
+Bunun daha optimal olmadığı açıktır. Aynı büyük O zamanına sahiptir, hatta biraz daha yavaş olabilir. HashTable ile son bir yinelemeyi ortdan kaldırdık.
+Şimdi de string'deki her karakter için fazladan birkaç kod satırı çalıştırmanız gerekir.
