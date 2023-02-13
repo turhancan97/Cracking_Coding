@@ -1,0 +1,54 @@
+Size her pixeli bir tam sayı ile gösterilen bir NxN matrisi ile temsil edilen bir görüntü veriliyor.
+Görüntüyü 90 derece döndürmek için bir metot yazın. Bunu yerinde yapabilir misin?
+
+Matrisi 90 derece döndürdüğümüz için, bunu yapmanın en kolay yolu katmanlar halinde döndürme uygulamaktır. Üst kenarı sağ
+kenara, sağ kenarı al kenara, alt kenarı sol kenara ve sol kenarı üst kenara haraket ettirerek her katmanda dairesel 
+bir dönüş gerçekleştiririz. 
+
+Bu dört yönlü ayrit degis tokusunu nasil gerçeklestiririz? Seçeneklerden biri üst kenar bir array' e kopyalayip solu üste, 
+alti sola tasiyarak ilerlemektir. O(N) bellek gerektirir, ki bu da aslinda gereksizdir.
+Bunu yapmanin daha iyi bir yolu, degisim indeksini, indekse göre uygulamaktir.
+Bu durumda asagidakileri gerçeklestiririz:
+
+for 1 = 0 to n
+    temp = top[1];
+    top[1] = left[1]
+    left[1] = bottom[1]
+    bottom[1] = right[1]
+    right[1] = temp
+
+En dıştaki katmandan başlayıp içeri doğru ilerleyerek her katmanda böyle bir değiş tokuş gerçekleştiririz.
+(Bunun yerine iç katmandan başlayıp dışarı doğru da ilerleyebiliriz)
+
+boolean rotate (int [][] matrix) {
+
+    if (matrix.length == 0 || matrix.length != matrix[0].length) return false;
+    int n = matrix.length;
+
+    for (int layer = 0; layer < n / 2; layer++) {
+        int first = layer;
+        int last = n - 1 - layer;
+        for(int i = first; i < last; i++) {
+            int offset = i - first;
+            int top = matrix[first][i]; // save top
+
+
+            // left -> top
+
+            matrix[first][i] = matrix[last-offset][first];
+
+            // bottom -> left
+            matrix/last-offset][first] = matrix[last ][last - offset];
+
+
+            // right -> bottom
+            matrix[last][last - offset] = matrix[i][last];
+
+            // top -> right
+            matrix[i][last] = top; // right < - saved top
+
+        }
+    }
+return true;
+}
+Bu algoritma O(N^2) 'dir. Bütün algoritmalarin N^2 elemanlarinin hepsinden geçmesi gerektiginden, yapabilecegimizin en iyisi budur.
