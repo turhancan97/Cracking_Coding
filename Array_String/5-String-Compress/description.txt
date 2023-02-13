@@ -1,0 +1,31 @@
+1.6 String Sikistirma: 
+Tekrarlanan karakterlerin sayisini kullanarak temel string sikistirmasi gerçeklestirmek için bir metot uygulayin. 
+Örneöin aabcccccaaa string' a2b1c5a3 olacaktir. "Sikistirilmis" string orijinal string'den daha küçük olmazsa, 
+metodunuz orijinal string' döndürmelidir. String'in yalnizca büyük ve küçük harflerden (a-z) olustugu varsayilabilir. 
+
+ÇÖZÜM
+ilk bakista bu metodu uygulamak oldukça basit görünse de biraz sikici olabilir.
+Karakterleri yeni bir string'e kopyalayip tekrarlari sayarak string' yineleriz.
+Her yinelemede, mevcut karakterin bir sonraki karakterle ayni olup olmadigini kontrol edin. Eger degilse, 
+sonuca sikistirilmis halini ekleyin. Bu ne kadar zor olabilir ki?
+
+String compressBad(String str) {
+    String compressedString = '';
+    int countConsecutive = 0;
+
+    for (int i = 0; i < str.length(); i++) {
+        countConsecutive += 1;
+        /* If next character is different than current , append this char to result */
+
+        if (i + 1 >= str.length() || str.charAt(i) != str.charAt(i+1)) {
+            compressedString += '' + str.charAt(i) + countConsecutive;
+            countConsecutive = 0;
+        }
+    }
+    return compressedString.length() < str.length() ? compressedString : str;
+}
+
+İşe yarıyor. Yine de, verimli olduğu söylenebilir mi? Bu kodun çalışma zamanına göz atın. 
+
+Çalışma zamanı O(p + k^2)'dir. Burada p orjinal stringin boyu ve k karakter dizilerinin sayısıdır. 
+Örneğin string aabccdeeaa ise, altı karakter dizisi vardır. Yavaştır çünkü dizi birleştirme O(n^2) zamanında çalışır. 
