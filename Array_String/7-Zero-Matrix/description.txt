@@ -1,0 +1,119 @@
+Eger MxN matrisindeki bir eleman O ise, tüm satir ve sütunun O olarak ayarlanmasini sağlayacak bir algoritma yazin.
+
+ÇOZÜM
+Bu problem ilk bakista göze kolay görünebilir. Alt taraft matrisi yineleyip O degerine sahip bir hücre gördügümüzde, satirını ve sütununu 0 olarak ayarlayacagiz o kadar. Ancak bu cözümün bir sikintisti vardir. O satir veya sütundaki diger hücrelerle karsilastigimizda 
+sifirlar görüp, satir ve sütunlarini sifir olarak degistireceğiz ve boylece kisa bir süre içerisinde tüm matrisimiz sifirlarla dolmus olacak.
+Bun engellemenin yollarindan biri, sifir konumlarinı isaretleyen ikinci bir matris bulundurmaktir. Sonra da sifirlari ayarlamak için matristen ikinci bir geçiş yapilir. Bu, O(MN) alani alir.
+
+Gerçekten O(MN) alanina ihtiyacimiz var midir peki? Hayir. Tüm satir ve sutunlar sifira ayarlayacagimizdan, bunun tam olarak cell[2][4] (2. satir, 4. sütun) oldugunu takip etmemiz gerekmez. Yalnizca 2. satirda ve 4. sütunda bir yerlerde birer 0 oldugundan emin olmamiz 
+gerekir. Zaten bütün satir ve sütunu sifira ayarlayacagiz, neden sifirin tam konumunu takip etmek isteyelim ki?
+Asagidaki kod bu algoritmay uygular. Tüm satirlari ve sütunlari sifirlarla takip etmek için iki array kullaniriz. Daha sonra bu array'lerdeki degerlere dayali olarak satir ve sütunlari sifirlariz.
+
+void setZeros(int[][] matrix) {
+    boolean[] row = new boolean[matrix.length];
+    boolean[] column = new boolean[matrix[0].length];
+
+    // Store the row and column index with values 0
+    for (int i = 0; i < matrix.length; i++)
+    {
+        for (int j = 0; j < matrix[0].length; j++)
+        {
+            if (matrix[i][j] == 0)
+            {
+                row[i] = true;
+                column[j] = true;
+            }
+        }
+    }
+// Nullify rows
+for (int i = 0; i < row.length; i++)
+{
+    if (row[i]) nullifyRow(matrix,i);
+}
+
+// Nullify columns
+for (int j = 0; j < column.length; j++)
+{
+    if (column[j]) nullifyColumn(matrix,j);{
+    }
+
+}
+
+void nullifyRow(int[][] matrix, int row)
+{
+    for (int j = 0; j < matrix[0].length; j++)
+    {
+        matrix[row][j] = 0;
+    }
+}
+
+void nullifyColumn(int[][] matrix, int col){
+    for (int i = 0; i < matrix.length; i++)
+    {
+        matrix[i][col] = 0;
+    }
+}
+
+
+Bunu biraz daha verimli hale getirmek için boolen array'ı yerine bir bit vektöru kullanabiliriz. Bu sekilde de O(N) alani tutacaktir.
+ilk sütunu row array' ve ilk satir da column array'i yerine kullanarak alani O(1)'e indirebiliriz. Bu su sekilde çalisir:
+1.    ilk satir ve ilk sütunda sifir olup olmadigini kontrol edip rowHasZero ve columnHasZero degiskenlerini ayarlayin. (Gerekli olmasi durumunda daha sonra ilk satir ve sütunu iptal ederiz.)
+2.    matrix [i][i]'de sifir bulundugu her seferde matrix [i][0] ve matrix [0][j]'yi sifira ayarlayarak matrisin geri kalanini yineleyin.
+3.    matrix[i][O]'da sifir varsa, i satirini gegersiz kilarak matrisin geri kalanin yineleyin
+4.    matrix[0][i]'de sifir varsa, j sütununu geçersiz kilarak matrisin geri kalanini yineleyin
+5.    Gerekirse ilk satir ve sütunu geçersiz kilin. (1. adimdaki degerlere göre)
+
+Kod, asagidadir:
+
+    void setZeros (int[][] matrix) {
+        boolean rowHasZero = false;
+        boolean colHasZero = false;
+        
+        // Check if first row has a zero
+        for (int j = 0; j < matrix[0].length; j++) {
+
+            if (matrix[0][j] == 0) {
+                rowHasZero = true;
+                break;
+            }
+        }
+
+        // Check if first column has a zero
+        for (int i = 0; i < matrix.length; i++) {
+            if (matrix[i][0] == 0) {
+                colasZero = true;
+                break;
+        }
+    }
+    
+    // Check for zeros in the rest of the array 
+    for (int i = 1; i < matrix.length; i++) { 
+        for (int j = 1; j < matrix[0].length; j++) {
+            if (matrix[i][j] == 0) {
+                matrix[i][0] = 0;
+                matrix[0][j] = 0;
+    }
+
+    // Nullify rows based on values in first column
+    for (int i = 1; i < matrix.length; i++) {
+        if (matrix[i][0] == 0) {
+            nullifyRow(matrix, i);
+        }
+    }
+    // Nullify columns based on values in first row
+    for (int j = 1; j < matrix[0].length; j++) {
+        if (matrix[0][j] == 0) {
+            nullifyColumn(matrix, j);
+    
+    // Nullify first row
+    if (rowtasZero) {
+        nullifyRow (matrix, 0);
+    }
+    // Nullify first column
+    if (colhasZero) {
+        nullifyColumn(matrix, 0);
+    }
+}
+
+Bu kodda cokça "satirlar için soyle yapin ve ardindan sütun için de aynisini yapin" geçer. 
+Bu kodu bir mülakatta, kolonlar için yazdiktan sonra satirlar için TODO ve açiklamalar ekleyerek ayn sekilde ama satir kullanilarak kodlanacag sekilde kisaltabilirsiniz. Bunu yapmaniz, algoritmanin en ônemli kisimlanna odaklanabilmenizi saglar.
