@@ -1,0 +1,33 @@
+String Döndürme: Bir sozcügün digerinin alt dizesi olup olmadigini kontrol eden isSubstring metodunuz oldugunu varsayalim. 
+Iki String, s1 ve s2 verildiginde s2'nin, isSubstring'e tek bir agri kullanarak s1'nin dönüsü olup olmadigini kontrol etmek 
+için kod yazin (Örnegin, "waterbottle", "erbottlewat" in bir dönüsüdür).
+
+COZÜM
+s2'nin s1'in dondurulmus hall oldugunu dusunursek, aklimiza donme noktasinin ne oldugu sorusu gelebilir. Ornegin waterbottle'ı
+wat'tan sonra döndürürseniz, erbottlewat elde edersiniz. Bir dondurme isleminde, s11 x ve y olmak üzere iki parçaya bölüp, s2 
+elde edecek sekilde yeniden düzenleriz.
+----
+s1 = xy = waterbottle
+x = wat
+y = erbottle
+s2 = yx = erbottlewat
+---
+
+Oyleyse, s1'i x ve y'ye, xy = s1 ve yx = s2 olacak sekilde bölmenin bir yolu olup olmadigina bakmaliyiz. x ve y arasindaki 
+bölünmenin nerede oldugundan bagimsiz olarak, yx'in her zaman xyxy'nin bir alt string'i olacagini görebiliriz.
+Yani s2 her zaman s1s1'in bir alt string'i olacaktir.
+Ve sorunu, yalnizca isSubstring(ss1, s2) yaparak basite çözeriz.
+
+------
+boolean isRotation(String s1, String s2) {
+    int len = s1.length();
+    /* Check that s1 and s2 are equal length and not empty */
+    if (len == s2.length() && len > 0) {
+        /* Concatenate s1 and s1 within new buffer */
+        String s1s1 = s1 + s1;
+        return isSubstring(s1s1, s2);
+}
+return false;
+}
+------
+
