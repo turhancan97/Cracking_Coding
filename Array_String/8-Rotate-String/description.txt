@@ -31,3 +31,6 @@ return false;
 }
 ------
 
+Bu çalışma zamanı, isSubstring'in çalışma zamanına bağlı olarak
+değişir. Ancak isSubstring'in (A ve B uzunluğundaki string'lerde) O(A+B) zamanında
+çalıştığını varsayarsanız, isRotation'ın çalıştığı çalışma zamanı O(N) olur. 

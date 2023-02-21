@@ -1,0 +1,84 @@
+Bir linked list oluşturma:
+-----
+class Node {
+    Node next = null;
+    int data;
+
+    public Node(int d) {
+        data = d;
+    }
+
+    void appendToTail(int d) {
+        Node end = new Node(d);
+        Node n = this;
+        while (n.next != null) {
+            n = n.next;
+        }
+        n.next = end;
+    }
+}
+-----
+
+Bu uygulamada Linked List vert yapimiz yok. Linked List'e, Linked List'in, başlangıç dugumüne bir referans aracligıyla erişiriz. 
+Linked Listi bu şekilde uygludigıniz zamanlarda biraz dikkatli olmaniz gerekir. Birden sok nesneni Linked Liste basvurmaya 
+ihtiyact vasa ve ardindan Linked List'in baslangıcı degisirse ne olur? Bazi nesneler hala eski baslangici gosteriyor olabilir.
+
+Seçebilseydik, dügüm sinıfinın sarmalayan bir Linked List sinifi uygulayabilidik.
+Bu esasen yalnizca tek bir üye degiskene sahip olacaktir: baslangiç dügümü.
+Bu, önceki sorunu büyük ölçüde çözecektir.
+
+Bir mülakatta bir Linked List'i tartisirken, bunun tek baglantili bir liste mi yoksa çift baglantili bir liste mi 
+oldugunu anlamaniz gerektigini unutmayin.
+
+Tek Baglantil Listeden Bir Dügümü Silme:
+
+Bir Linked List'ten bir dügümü silmek oldukça basittir. 
+Bir n dugumu verildiginde, Önceki dügümü bulup prev.next'i n.next'e esitleyerek ayarlariz.
+Liste çift baglantiliysa, n.next.prev'i n.prev'e esitleyebilmek için n.next' güncellemeliyiz. 
+Hatirlanmasi gereken onemli seyler (1) null pointer' kontrol etmek ve (2) baslangic veya kuyruk pointer'ini gerektigi gibi güncellemektir.
+Ek olarak, bu kodu C, C++ veya yazilimoinin bellek yönetimi yapmasini gerektiren baska bir dilde uygularsaniz, 
+kaldirilan dugumün serbest birakilmasi gerekip gerekmedigini dikkate almalisinız.
+
+----
+Node deleteNode(Node head, int d) {
+    if (head==null) return null;
+    Node n = head;
+
+    if (n.data == d) {
+        return head.next; /* moved head */
+    }
+
+    while (n.next!=null) {
+        if (n.next.data == d) {
+            n.next = n.next.next;
+            return head; /* head didn't change */
+        }
+
+        n = n.next;
+        }
+    }
+    return head;
+}
+----
+
+"Runner"' Teknigi:
+
+"Runner" (veya ikinci pointer) teknigi birgok Linked List probleminde kullanilmaktadir. 
+Runner teknigi, Linked List boyunca biri digerinin önünde olacak sekilde ayni anda iki pointer 
+ile yinelediginiz anlamina gelir. "Hizi" dügüm sabit bir miktar ileride olabilir veya "yavas" dügümün yineledigi 
+her bir dügüm için birden cok dügüm atliyor olabilir.
+Örnegin, a1->a2->....->an->b1->b2->...->bn seklinde bir Linked Listiniz oldugunu ve bunu 
+a1->b1->a2->b2->...->an->bn olarak yeniden düzenlemek istediginizi varsayalim. 
+Linked List'in uzunlugunu bilmiyorsunuz (ama uzunlugun çift say oldugunu biliyorsunuz).
+p2'nin yaptigi her hareket için her iki ogeyi hareket ettiren bir p1 pointer' iniz (hizli pointer) olabilir. 
+p1, Linked List'in sonuna ulastiginda, p2 orta noktada olacaktir. Sonra, pl'yi öne dogru hareket ettirin ve 
+elemanlar "dokumaya" baslayin. Her yinelemede, p2 bir eleman seger ve onu p1'den sonra ekler.
+
+Özyinelemeli Problemler:
+
+Bir dizi Linked List problemi özyinelemeye dayanir. Bir Linked List problemini cözmekte sorun yasiyorsaniz, 
+özyinelemeli bir yaklasimin ise yarayip yaramayacagini deneyip görmelisiniz. Burada yineleme üzerine derinlemesine 
+girmeyecegiz, günkü daha sonraki bir bölüm buna ayrildi.
+Bununla birlikte, özyinelemeli algoritmalarin en az O(n) alani kapladigini unutmamalisiniz, burada n özyinelemeli 
+gagrinin derinligidir. Tüm ozyinelemeli algoritmalar, bu onlar cok daha karmasik hâle getiriyor olsa da Özyinelemeli 
+Olarak uygulanabilir.
